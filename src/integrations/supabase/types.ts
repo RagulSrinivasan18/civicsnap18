@@ -14,16 +14,270 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      report_contacts: {
+        Row: {
+          email: string | null
+          name: string | null
+          phone: string | null
+          report_id: string
+        }
+        Insert: {
+          email?: string | null
+          name?: string | null
+          phone?: string | null
+          report_id: string
+        }
+        Update: {
+          email?: string | null
+          name?: string | null
+          phone?: string | null
+          report_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_contacts_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: true
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      report_images: {
+        Row: {
+          created_at: string
+          id: string
+          path: string
+          report_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          path: string
+          report_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          path?: string
+          report_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_images_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      report_supports: {
+        Row: {
+          created_at: string
+          id: string
+          report_id: string
+          supporter_key: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          report_id: string
+          supporter_key: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          report_id?: string
+          supporter_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_supports_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          address: string
+          ai_authority: string | null
+          ai_category: Database["public"]["Enums"]["report_category"] | null
+          ai_source: string | null
+          ai_summary: string | null
+          authority: string | null
+          category: Database["public"]["Enums"]["report_category"]
+          created_at: string
+          description: string
+          forwarded_at: string | null
+          forwarded_to: string | null
+          forwarding_channel: string | null
+          forwarding_reference: string | null
+          id: string
+          is_demo: boolean
+          latitude: number | null
+          locality: string
+          longitude: number | null
+          moderation: Database["public"]["Enums"]["moderation_state"]
+          possible_duplicate_of: string | null
+          reference: string
+          resolution_notes: string | null
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["report_status"]
+          support_count: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          ai_authority?: string | null
+          ai_category?: Database["public"]["Enums"]["report_category"] | null
+          ai_source?: string | null
+          ai_summary?: string | null
+          authority?: string | null
+          category: Database["public"]["Enums"]["report_category"]
+          created_at?: string
+          description: string
+          forwarded_at?: string | null
+          forwarded_to?: string | null
+          forwarding_channel?: string | null
+          forwarding_reference?: string | null
+          id?: string
+          is_demo?: boolean
+          latitude?: number | null
+          locality: string
+          longitude?: number | null
+          moderation?: Database["public"]["Enums"]["moderation_state"]
+          possible_duplicate_of?: string | null
+          reference: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          support_count?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          ai_authority?: string | null
+          ai_category?: Database["public"]["Enums"]["report_category"] | null
+          ai_source?: string | null
+          ai_summary?: string | null
+          authority?: string | null
+          category?: Database["public"]["Enums"]["report_category"]
+          created_at?: string
+          description?: string
+          forwarded_at?: string | null
+          forwarded_to?: string | null
+          forwarding_channel?: string | null
+          forwarding_reference?: string | null
+          id?: string
+          is_demo?: boolean
+          latitude?: number | null
+          locality?: string
+          longitude?: number | null
+          moderation?: Database["public"]["Enums"]["moderation_state"]
+          possible_duplicate_of?: string | null
+          reference?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          support_count?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_possible_duplicate_of_fkey"
+            columns: ["possible_duplicate_of"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      status_history: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          report_id: string
+          status: Database["public"]["Enums"]["report_status"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          report_id: string
+          status: Database["public"]["Enums"]["report_status"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          report_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "status_history_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      moderation_state: "pending" | "approved" | "rejected" | "flagged"
+      report_category:
+        | "pothole"
+        | "garbage"
+        | "streetlight"
+        | "water"
+        | "public_safety"
+        | "other"
+      report_status:
+        | "submitted"
+        | "under_review"
+        | "forwarded"
+        | "in_progress"
+        | "resolved"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +404,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      moderation_state: ["pending", "approved", "rejected", "flagged"],
+      report_category: [
+        "pothole",
+        "garbage",
+        "streetlight",
+        "water",
+        "public_safety",
+        "other",
+      ],
+      report_status: [
+        "submitted",
+        "under_review",
+        "forwarded",
+        "in_progress",
+        "resolved",
+      ],
+    },
   },
 } as const
