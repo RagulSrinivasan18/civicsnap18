@@ -56,7 +56,7 @@ export function ruleBased(title: string, description: string, locality: string):
 }
 
 async function callModel(prompt: string): Promise<string> {
-  const key = process.env.LOVABLE_API_KEY;
+  const key = process.env["LOVABLE_API_KEY"];
   if (!key) throw new Error("AI key missing");
   const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
     method: "POST",

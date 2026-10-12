@@ -57,7 +57,7 @@ export function GoogleMap({
         if (!el.current) return;
         const g = window.google;
         map.current = new g.maps.Map(el.current, {
-          center: picked ?? (points[0] ? { lat: points[0].lat, lng: points[0].lng } : DEFAULT_CENTER),
+          center: picked ?? (points[0] ? { lat: points[0]!.lat, lng: points[0]!.lng } : DEFAULT_CENTER),
           zoom: 12,
           clickableIcons: false,
           streetViewControl: false,
@@ -88,7 +88,7 @@ export function GoogleMap({
       const b = new g.maps.LatLngBounds();
       points.forEach((p) => b.extend({ lat: p.lat, lng: p.lng }));
       map.current.fitBounds(b);
-    } else if (points.length === 1) map.current.setCenter({ lat: points[0].lat, lng: points[0].lng });
+    } else if (points.length === 1) map.current.setCenter({ lat: points[0]!.lat, lng: points[0]!.lng });
   }, [ready, points]);
 
   useEffect(() => {

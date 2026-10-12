@@ -43,7 +43,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
     <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold">This page didn't load</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message || "Something went wrong."}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{(error as Error)?.message || "Something went wrong."}</p>
         <button
           onClick={() => {
             router.invalidate();

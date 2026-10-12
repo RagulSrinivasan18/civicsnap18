@@ -84,7 +84,7 @@ export const updateReport = createServerFn({ method: "POST" })
     if (data.status === "forwarded" && !data.forwarding) {
       throw new Error("Record the forwarding details before marking a report as Forwarded.");
     }
-    const patch: Record<string, unknown> = {};
+    const patch: any = {};
     if (data.moderation) patch.moderation = data.moderation;
     if (data.category) patch.category = data.category;
     if (data.authority !== undefined) patch.authority = data.authority;
