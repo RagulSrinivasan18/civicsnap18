@@ -238,10 +238,17 @@ export const submitReport = createServerFn({ method: "POST" })
       if (!error) await db.from("report_images").insert({ report_id: inserted.id, path });
     }
 
+    // Sync to Google Sheets (non-blocking — failure does not block the report)
+    const { syncReportInsert } = await import("./sheet-sync.server");
+    const { data: fullReport } = await db.from("reports").select("*").eq("id", inserted.id).single();
+    const syncResult = await syncReportInsert(inserted.id, fullReport ?? {});
+
     return {
       reference: inserted.reference,
       ai: { category: ai.category, summary: ai.summary, authority: ai.authority, source: ai.source },
       possibleDuplicate: !!dup,
+      sheetSynced: syncResult.synced,
+      sheetSyncError: syncResult.synced ? undefined : syncResult.error,
     };
   });
 

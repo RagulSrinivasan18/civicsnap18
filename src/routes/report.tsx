@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { CheckCircle2, Loader2, Upload, X, AlertTriangle, ThumbsUp } from "lucide-react";
+import { CircleCheck as CheckCircle2, Loader as Loader2, Upload, X, TriangleAlert as AlertTriangle, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -154,6 +154,15 @@ function ReportPage() {
           <p className="mt-4 text-sm text-muted-foreground">
             Your report will appear publicly after an administrator approves it. It has <strong>not</strong> yet been sent to any authority.
           </p>
+          {result.sheetSynced ? (
+            <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-success">
+              <CheckCircle2 className="h-3.5 w-3.5" /> Recorded in Google Sheets.
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Could not sync to Google Sheets right now. Your report is saved — an admin can retry the sync later.
+            </p>
+          )}
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Button asChild><Link to="/track" search={{ ref: result.reference }}>Track this report</Link></Button>
             <Button variant="outline" onClick={() => { setResult(null); setForm({ title: "", description: "", category: "", locality: "", address: "", contactName: "", contactEmail: "", contactPhone: "" }); setFiles([]); setLoc(null); }}>

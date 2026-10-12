@@ -108,5 +108,34 @@ export const updateReport = createServerFn({ method: "POST" })
         : data.note || null;
       await context.supabase.from("status_history").insert({ report_id: data.id, status: patch.status as any, note });
     }
+
+    // Sync the updated report to Google Sheets (non-blocking — failure does not block the update)
+    try {
+      const { syncReportUpdate } = await import("./sheet-sync.server");
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: updatedRow } = await supabaseAdmin.from("reports").select("*").eq("id", data.id).maybeSingle();
+      if (updatedRow) await syncReportUpdate(data.id, updatedRow);
+    } catch (syncErr) {
+      console.error("Sheet sync after admin update failed:", syncErr);
+    }
+
     return { ok: true };
+  });
+
+export const retrySheetSync = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ reportId: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { retrySheetSync: retry } = await import("./sheet-sync.server");
+    return retry(data.reportId);
+  });
+
+export const getSyncStatus = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ reportId: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { getSyncStatus: getStatus } = await import("./sheet-sync.server");
+    return getStatus(data.reportId);
   });
