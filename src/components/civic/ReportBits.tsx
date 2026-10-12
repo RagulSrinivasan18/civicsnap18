@@ -23,7 +23,7 @@ const statusStyles = cva("inline-flex items-center rounded-full px-2.5 py-0.5 te
 
 export function StatusBadge({ status }: { status: string }) {
   const label = ["pending", "approved", "rejected", "flagged"].includes(status)
-    ? status[0].toUpperCase() + status.slice(1)
+    ? status.charAt(0).toUpperCase() + status.slice(1)
     : statusLabel(status);
   return <span className={statusStyles({ status: status as any })}>{label}</span>;
 }

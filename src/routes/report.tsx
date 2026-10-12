@@ -42,7 +42,7 @@ type Result = Awaited<ReturnType<typeof submitReport>>;
 const toBase64 = (f: File) =>
   new Promise<string>((res, rej) => {
     const r = new FileReader();
-    r.onload = () => res(String(r.result).split(",")[1]);
+    r.onload = () => res(String(r.result).split(",")[1] ?? "");
     r.onerror = rej;
     r.readAsDataURL(f);
   });
@@ -171,14 +171,14 @@ function ReportPage() {
       <p className="mt-2 text-muted-foreground">Fields marked * are required.</p>
 
       <form onSubmit={onSubmit} className="mt-8 space-y-6" noValidate>
-        <Field label="Issue title *" error={errors.title} id="title">
+        <Field label="Issue title *" error={errors["title"]} id="title">
           <Input id="title" value={form.title} onChange={(e) => set("title")(e.target.value)} placeholder="e.g. Large pothole near bus stop" maxLength={150} />
         </Field>
-        <Field label="Detailed description *" error={errors.description} id="description">
+        <Field label="Detailed description *" error={errors["description"]} id="description">
           <Textarea id="description" rows={5} value={form.description} onChange={(e) => set("description")(e.target.value)} placeholder="What is the problem, how long has it been there, who is affected?" maxLength={2000} />
         </Field>
         <div className="grid gap-6 sm:grid-cols-2">
-          <Field label="Category *" error={errors.category} id="category">
+          <Field label="Category *" error={errors["category"]} id="category">
             <Select value={form.category} onValueChange={set("category")}>
               <SelectTrigger id="category"><SelectValue placeholder="Choose a category" /></SelectTrigger>
               <SelectContent>
@@ -186,7 +186,7 @@ function ReportPage() {
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Locality *" error={errors.locality} id="locality">
+          <Field label="Locality *" error={errors["locality"]} id="locality">
             <Input id="locality" value={form.locality} onChange={(e) => set("locality")(e.target.value)} placeholder="e.g. Anna Nagar" maxLength={100} />
           </Field>
         </div>
@@ -211,7 +211,7 @@ function ReportPage() {
           </div>
         )}
 
-        <Field label="Address / landmark *" error={errors.address} id="address">
+        <Field label="Address / landmark *" error={errors["address"]} id="address">
           <Input id="address" value={form.address} onChange={(e) => set("address")(e.target.value)} placeholder="Street, landmark" maxLength={300} />
         </Field>
 
@@ -254,11 +254,11 @@ function ReportPage() {
             <Input aria-label="Name" placeholder="Name" value={form.contactName} onChange={(e) => set("contactName")(e.target.value)} maxLength={100} />
             <div>
               <Input aria-label="Email" placeholder="Email" type="email" value={form.contactEmail} onChange={(e) => set("contactEmail")(e.target.value)} maxLength={255} />
-              {errors.contactEmail && <p className="mt-1 text-xs text-destructive">{errors.contactEmail}</p>}
+              {errors["contactEmail"] && <p className="mt-1 text-xs text-destructive">{errors["contactEmail"]}</p>}
             </div>
             <div>
               <Input aria-label="Phone" placeholder="Phone" value={form.contactPhone} onChange={(e) => set("contactPhone")(e.target.value)} maxLength={20} />
-              {errors.contactPhone && <p className="mt-1 text-xs text-destructive">{errors.contactPhone}</p>}
+              {errors["contactPhone"] && <p className="mt-1 text-xs text-destructive">{errors["contactPhone"]}</p>}
             </div>
           </div>
         </fieldset>
@@ -271,7 +271,7 @@ function ReportPage() {
   );
 }
 
-function Field({ label, error, id, children }: { label: string; error?: string; id: string; children: React.ReactNode }) {
+function Field({ label, error, id, children }: { label: string; error?: string | undefined; id: string; children: React.ReactNode }) {
   return (
     <div>
       <Label htmlFor={id}>{label}</Label>
